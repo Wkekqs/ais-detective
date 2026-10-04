@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Прототип АИС Детектив</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            margin: 0;
+            background-color: #dcdcdc;
+            color: #222;
+            padding: 35px 15px;
+        }
+        .box {
+            max-width: 750px;
+            margin: 0 auto;
+            background: #fff;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .head {
+            background: #2c3e50;
+            color: #fff;
+            padding: 12px 18px;
+            font-size: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+        .content {
+            padding: 20px;
+        }
+        .row {
+            margin-bottom: 14px;
+        }
+        .row label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+        .row input, .row textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #888;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .btn {
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-blue {
+            background: #1a66cc;
+            color: white;
+        }
+        .btn-gray {
+            background: #e0e0e0;
+            color: #333;
+            border: 1px solid #999;
+        }
+        .status {
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .st-work {
+            background: #d4e6f1;
+            color: #154360;
+        }
+        .st-arch {
+            background: #ebedef;
+            color: #5d6d7e;
+        }
+        .st-ok {
+            background: #d4efdf;
+            color: #196f3d;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        th, td {
+            border: 1px solid #bbb;
+            padding: 9px 10px;
+            text-align: left;
+        }
+        th {
+            background: #f2f2f2;
+        }
+        .msg {
+            padding: 10px 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            display: none;
+        }
+        .msg-err {
+            background: #fadbd8;
+            color: #922b21;
+            border: 1px solid #e6b0aa;
+        }
+        .msg-ok {
+            background: #d4efdf;
+            color: #196f3d;
+            border: 1px solid #a9dfbf;
+        }
+    </style>
+</head>
+<body>
+
+<div id="page1" class="box">
+    <div class="head">
+        <span>Экран 1. Авторизация</span>
+        <span>АИС «Детектив»</span>
+    </div>
+    <div class="content">
+        <div id="err1" class="msg msg-err">Ошибка входа! Введите логин, пароль и код 2FA.</div>
+        <div class="row">
+            <label>Логин сотрудника:</label>
+            <input type="text" id="inp_login" value="detective_makarevich">
+        </div>
+        <div class="row">
+            <label>Пароль:</label>
+            <input type="password" id="inp_pass" value="12345678">
+        </div>
+        <div class="row">
+            <label>Код 2FA:</label>
+            <input type="text" id="inp_2fa" value="482-910">
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+            <a href="#" onclick="alert('Запрос на сброс пароля отправлен администратору.'); return false;" style="font-size:12px; color:#1a66cc;">Восстановить пароль</a>
+            <button class="btn btn-blue" onclick="login()">Войти в систему</button>
+        </div>
+    </div>
+</div>
+
+<div id="page2" class="box" style="display:none;">
+    <div class="head">
+        <span>Экран 2. Реестр расследований</span>
+        <span>Сотрудник: Макаревич А.А.</span>
+    </div>
+    <div class="content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <b>Список активных дел</b>
+            <span class="status st-work">Статус: В работе</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>№ Дела</th>
+                    <th>Название дела</th>
+                    <th>Статус</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>#Д-2026-04</b></td>
+                    <td>Хищение цифровых активов ООО «Вектор»</td>
+                    <td><span class="status st-work">В работе</span></td>
+                    <td><button class="btn btn-blue" onclick="openPage(3)">Открыть</button></td>
+                </tr>
+                <tr>
+                    <td>#Д-2026-01</td>
+                    <td>Проверка контрагента ЗАО «БелТранс»</td>
+                    <td><span class="status st-arch">В архиве</span></td>
+                    <td><button class="btn btn-gray" onclick="alert('Дело находится в архиве!')">Архив</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="margin-top:15px; text-align:right;">
+            <button class="btn btn-gray" onclick="openPage(1)">Выход</button>
+        </div>
+    </div>
+</div>
+
+<div id="page3" class="box" style="display:none;">
+    <div class="head">
+        <span>Экран 3. Карточка дела #Д-2026-04 (Улики)</span>
+        <span>Шифрование: AES-256</span>
+    </div>
+    <div class="content">
+        <div id="ok_box" class="msg msg-ok">Файл успешно проверен, зашифрован и добавлен в базу данных и журнал аудита.</div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <button class="btn btn-gray" onclick="openPage(2)">Назад к списку</button>
+            <button class="btn btn-blue" onclick="showAddWindow()">Добавить улику</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Файл</th>
+                    <th>Описание</th>
+                    <th>Размер</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody id="table_body">
+                <tr>
+                    <td>osmotr_servera.jpg</td>
+                    <td>Фотофиксация серверной стойки</td>
+                    <td>4.20 МБ</td>
+                    <td><span class="status st-ok">Зашифровано</span></td>
+                </tr>
+                <tr>
+                    <td>protokol_oprosa.pdf</td>
+                    <td>Скан протокола опроса свидетеля</td>
+                    <td>1.85 МБ</td>
+                    <td><span class="status st-ok">Зашифровано</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="page4" class="box" style="display:none;">
+    <div class="head">
+        <span>Экран 4. Модальное окно загрузки улики</span>
+        <span style="cursor:pointer;" onclick="openPage(3)">X</span>
+    </div>
+    <div class="content">
+        <div id="err2" class="msg msg-err"></div>
+        <div class="row">
+            <label>Выберите файл (.jpg, .png, .mp4, .mp3, .pdf, до 500 МБ):</label>
+            <input type="file" id="inp_file">
+        </div>
+        <div class="row">
+            <label>Краткое описание:</label>
+            <textarea id="inp_desc" rows="3" placeholder="Введите описание улики..."></textarea>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px;">
+            <button class="btn btn-gray" onclick="openPage(3)">Отмена</button>
+            <button class="btn btn-blue" onclick="saveFile()">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openPage(n)
+    {
+        for (let i = 1; i <= 4; i++)
+        {
+            if (i == n)
+            {
+                document.getElementById('page' + i).style.display = 'block';
+            }
+            else
+            {
+                document.getElementById('page' + i).style.display = 'none';
+            }
+        }
+    }
+
+    function login()
+    {
+        let l = document.getElementById('inp_login').value;
+        let p = document.getElementById('inp_pass').value;
+        let c = document.getElementById('inp_2fa').value;
+
+        if (l == '' || p == '' || c == '')
+        {
+            document.getElementById('err1').style.display = 'block';
+            return;
+        }
+
+        document.getElementById('err1').style.display = 'none';
+        openPage(2);
+    }
+
+    function showAddWindow()
+    {
+        document.getElementById('err2').style.display = 'none';
+        document.getElementById('ok_box').style.display = 'none';
+        document.getElementById('inp_file').value = '';
+        document.getElementById('inp_desc').value = '';
+        openPage(4);
+    }
+
+    function saveFile()
+    {
+        let fInput = document.getElementById('inp_file');
+        let desc = document.getElementById('inp_desc').value;
+        let err = document.getElementById('err2');
+
+        if (desc == '')
+        {
+            desc = 'Без описания';
+        }
+
+        if (fInput.files.length == 0)
+        {
+            err.innerText = 'Ошибка: файл не выбран!';
+            err.style.display = 'block';
+            return;
+        }
+
+        let f = fInput.files[0];
+        let parts = f.name.split('.');
+        let ext = parts[parts.length - 1].toLowerCase();
+        let types = ['jpg', 'png', 'mp4', 'mp3', 'pdf'];
+
+        if (!types.includes(ext))
+        {
+            err.innerText = 'Ошибка формата! Разрешены только файлы: jpg, png, mp4, mp3, pdf.';
+            err.style.display = 'block';
+            return;
+        }
+
+        let limit = 500 * 1024 * 1024;
+        if (f.size > limit)
+        {
+            err.innerText = 'Ошибка: размер файла превышает 500 МБ!';
+            err.style.display = 'block';
+            return;
+        }
+
+        let mb = (f.size / (1024 * 1024)).toFixed(2) + ' МБ';
+        let tb = document.getElementById('table_body');
+        let tr = document.createElement('tr');
+
+        tr.innerHTML = '<td>' + f.name + '</td>' +
+                       '<td>' + desc + '</td>' +
+                       '<td>' + mb + '</td>' +
+                       '<td><span class="status st-ok">Зашифровано</span></td>';
+
+        tb.appendChild(tr);
+        openPage(3);
+        document.getElementById('ok_box').style.display = 'block';
+    }
+</script>
+</body>
+</html>
